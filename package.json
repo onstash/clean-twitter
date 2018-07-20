@@ -1,0 +1,10 @@
+{
+  "name": "clean-twitter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Santosh Venkatraman <santosh.venk@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+  	"build": "parcel build src/content/content.js && parcel build src/background.js && mv dist/content.js . && mv dist/background.js ."
+  }
+}
