@@ -1,20 +1,11 @@
-function hideDOMElement(componentsToHide, selector) {
-    const hidingCSSTypes = {
-        ".moments.js-moments-tab": "display: none !important;",
-        "moments js-moments-tab": "display: none !important;"
-    };
-    // const cssToHideComponent = "display: none !important;";
-    const defaultCSSToHideComponent = "visibility: hidden !important;";
-    console.log({selector, componentsToHide});
-    for (const componentToHide of componentsToHide) {
-        if (componentToHide !== null) {
-            const newStyle = hidingCSSTypes[selector] || defaultCSSToHideComponent;
-            console.log({existingStyle: componentToHide.style, newStyle, isEqual: componentToHide.style === newStyle });
-            componentToHide.style = newStyle;
-        }
-    }
-}
-
+const hideDOMElementsCSSProps = {
+    "display": "none !important",
+    "visibility": "hidden !important"
+};
+const hidingCSSTypes = {
+    ".moments.js-moments-tab": "display",
+    "[data-promoted='true']": "display",
+};
 const selectors = [
     ".module.wtf-module.js-wtf-module", // 'Who to follow'
     ".module.Footer", // Footer under 'Who to follow',
@@ -23,16 +14,25 @@ const selectors = [
     ".moments.js-moments-tab", // Moments navigation tab,
 ];
 
+function hideDOMElement(componentsToHide, selector) {
+    const defaultCSSToHideComponent = "visibility";
+    for (const componentToHide of componentsToHide) {
+        if (componentToHide !== null) {
+            const visibilityProp = hidingCSSTypes[selector] || defaultCSSToHideComponent;
+            componentToHide.setProperty(visibilityProp, hideDOMElementsCSSProps[visibilityProp]);
+        }
+    }
+}
+
 function cleanupTwitterInterface() {
     for (const selector of selectors) {
         waitForElement(selector)
             .then(function(elements) {
-                console.log({ message: "Elements added", elements });
                 hideDOMElement(elements, selector);
             });
     }
 
-    waitForElement(".promoted-tweet", { disconnect: false }, hideDOMElement);
+    waitForElement("[data-promoted='true']", { disconnect: false }, hideDOMElement);
 
     if (document.querySelector("#__like_button_tab") === null) {
         waitForElement("#global-actions", { rejectIfAlreadyPresent: true })
@@ -50,7 +50,6 @@ function cleanupTwitterInterface() {
 
                 const spanIcon = document.createElement("span");
                 spanIcon.setAttribute("class", "Icon Icon--heart Icon--large");
-                // <span class="Icon Icon--heart Icon--large"></span><span class="text">Likes</span>
                 const spanText = document.createElement("span");
                 spanText.setAttribute("class", "text");
                 spanText.innerText = "Likes";
@@ -58,11 +57,8 @@ function cleanupTwitterInterface() {
                 likesTabComponentLink.appendChild(spanIcon);
                 likesTabComponentLink.appendChild(spanText);
 
-                console.log({ globalActionsNavBar, likesTabComponent, likesTabComponentLink });
                 likesTabComponent.appendChild(likesTabComponentLink);
-                console.log({ globalActionsNavBar, likesTabComponent, likesTabComponentLink });
                 globalActionsNavBar.appendChild(
-                    // '<li><a role="button" data-nav="favorites" href="/i/likes" class="js-nav js-tooltip js-dynamic-tooltip" id="__like_button_tab" data-placement="bottom"><span class="Icon Icon--heart Icon--large"></span><span class="text">Likes</span></a></li>'
                     likesTabComponent
                 );
             })
@@ -76,17 +72,13 @@ function cleanupTwitterInterface() {
         { disconnect: false },
         function (elements) {
             if (document.body.getBoundingClientRect().top >= -20) {
-                console.log("Fetching new tweets");
                 elements[0].click();
-            } else {
-                console.log("Not fetching new tweets");
             }
         }
     );
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log({ source: "chrome.runtime.onMessage.addListener", request, sender, sendResponse });
     if (request.message === "Twitter URL has changed") {
         cleanupTwitterInterface();
     }
@@ -95,16 +87,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 const isUserLoggedIn = document.querySelectorAll(".logged-out").length === 0;
 
 function waitForElement(selector, options, callback) {
-  const rejectIfAlreadyPresent = (options || {}).rejectIfAlreadyPresent || false;
+  let rejectIfAlreadyPresent = (options || {}).rejectIfAlreadyPresent;
+  rejectIfAlreadyPresent = rejectIfAlreadyPresent === undefined ? false : rejectIfAlreadyPresent;
   let disconnect = (options || {}).disconnect;
   disconnect = disconnect === undefined ? true : disconnect;
-  console.log({ selector, options, disconnect, callback });
   return new Promise(function(resolve, reject) {
     const elements = document.querySelectorAll(selector);
     const areElementsValid = elements !== null && elements !== undefined && elements.length && elements.length > 0;
 
     if (areElementsValid && rejectIfAlreadyPresent) {
-        console.log({ selector, options, elements, count: elements.length, areElementsValid });
         reject(elements);
         return;
     }
@@ -115,28 +106,21 @@ function waitForElement(selector, options, callback) {
         const nodes = Array.from(mutation.addedNodes);
         for(const node of nodes) {
           if(node.matches && node.matches(selector)) {
-            console.log({ matchingNodes });
             matchingNodes.push(node);  
-            console.log({ matchingNodes });
           }
         };
         if (matchingNodes.length) {
             if (disconnect) {
-                console.log("Disconnecting MutationObserver for " + selector);
                 observer.disconnect();
             } else {
-                console.log("Not disconnecting MutationObserver for " + selector);
             }
-            callback !== undefined && callback(matchingNodes, selector);
+            window.requestAnimationFrame(function () {
+                callback !== undefined && callback(matchingNodes, selector);
+            });
             resolve(matchingNodes);
             return;
         }
       });
-      // if (matchingNodes.length === 0) {
-      //   observer.disconnect();
-      //   reject([]);
-      //   return;
-      // }
     });
 
     observer.observe(document.documentElement, { childList: true, subtree: true });
@@ -146,6 +130,3 @@ function waitForElement(selector, options, callback) {
 if (isUserLoggedIn) {
     cleanupTwitterInterface();
 }
-
-".tweet-context > .Icon--retweeted"
-".tweet-context > .Icon--heartBadge"
