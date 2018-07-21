@@ -23,7 +23,6 @@
         "64": "images/bird_64.png",
         "128": "images/bird_128.png" 
     },
-    "options_page": "options.html",
     "content_scripts": [
     	{
     		"run_at": "document_start",
