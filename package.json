@@ -5,6 +5,6 @@
   "author": "Santosh Venkatraman <santosh.venk@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "parcel build src/content.js && parcel build src/background.js && mv dist/content.js . && mv dist/background.js . && mv dist/content.map . && mv dist/background.map ."
+    "build": "rm -rf dist && parcel build src/content.js --no-source-maps && parcel build src/background.js --no-source-maps && cp manifest.json dist/. && cp -r images/. dist/images"
   }
 }
