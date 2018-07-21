@@ -11,7 +11,7 @@ export const hideWhoToFollow = () => {
             selector,
             callback: elements => {
                 hideDOMElement(elements, selector);
-            }
+            },
         });
     }
 };

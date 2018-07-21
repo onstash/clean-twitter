@@ -4,7 +4,7 @@ import { observeElement } from "./observe-element";
 const LIKE_TAB_SELECTOR = "#__like_button_tab";
 
 export const hideMomentsTab = () => {
-    const selector = ".moments.js-moments-tab" // Moments navigation tab
+    const selector = ".moments.js-moments-tab"; // Moments navigation tab
     observeElement({
         selector,
         callback: elements => {
@@ -18,7 +18,7 @@ export const addLikesTabToNavBar = () => {
         observeElement({
             selector: "#global-actions",
             options: { skipIfAlreadyPresent: true },
-            callback: _addLikesTabToNavBar
+            callback: _addLikesTabToNavBar,
         });
     }
 };
@@ -30,7 +30,10 @@ const _addLikesTabToNavBar = globalActionsNavBars => {
     likesTabComponentLink.setAttribute("href", "/i/likes");
     likesTabComponentLink.setAttribute("role", "button");
     likesTabComponentLink.setAttribute("data-nav", "favorites");
-    likesTabComponentLink.setAttribute("class", "js-nav js-tooltip js-dynamic-tooltip");
+    likesTabComponentLink.setAttribute(
+        "class",
+        "js-nav js-tooltip js-dynamic-tooltip"
+    );
     likesTabComponentLink.setAttribute("id", "__like_button_tab");
     likesTabComponentLink.setAttribute("data-placement", "bottom");
     likesTabComponent.setAttribute("style", "cursor: pointer;");
@@ -45,7 +48,5 @@ const _addLikesTabToNavBar = globalActionsNavBars => {
     likesTabComponentLink.appendChild(spanText);
 
     likesTabComponent.appendChild(likesTabComponentLink);
-    globalActionsNavBar.appendChild(
-        likesTabComponent
-    );
+    globalActionsNavBar.appendChild(likesTabComponent);
 };

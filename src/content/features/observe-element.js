@@ -1,12 +1,17 @@
 const noOp = () => {};
 const defaultOptions = { overrideSkip: false, disconnect: true };
 
-export const observeElement = ({ selector, options = defaultOptions, callback = noOp }) => {
+export const observeElement = ({
+    selector,
+    options = defaultOptions,
+    callback = noOp,
+}) => {
     const elements = document.querySelectorAll(selector);
-    const areElementsValid = (
-        elements !== null && elements !== undefined &&
-        elements.length && elements.length > 0
-    );
+    const areElementsValid =
+        elements !== null &&
+        elements !== undefined &&
+        elements.length &&
+        elements.length > 0;
     if (areElementsValid) {
         callback(elements, selector);
         return;
@@ -16,7 +21,7 @@ export const observeElement = ({ selector, options = defaultOptions, callback = 
 
     const observer = new MutationObserver((mutations, observer) => {
         const matchingNodes = [];
-        mutations.forEach((mutation) => {
+        mutations.forEach(mutation => {
             const { addedNodes: nodes } = mutation;
             for (const node of nodes) {
                 if (node.matches && node.matches(selector)) {
@@ -37,5 +42,8 @@ export const observeElement = ({ selector, options = defaultOptions, callback = 
         });
     });
 
-    observer.observe(document.documentElement, { childList: true, subtree: true });
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
 };

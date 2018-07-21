@@ -20,4 +20,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-document.querySelectorAll(".logged-out").length === 0 && cleanupTwitterInterface();
+document.querySelectorAll(".logged-out").length === 0 &&
+    cleanupTwitterInterface();
