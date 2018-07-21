@@ -20,8 +20,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
-const isUserLoggedIn = document.querySelectorAll(".logged-out").length === 0;
-
-if (isUserLoggedIn) {
-    cleanupTwitterInterface();
-}
+document.querySelectorAll(".logged-out").length === 0 && cleanupTwitterInterface();
