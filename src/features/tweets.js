@@ -1,5 +1,5 @@
-import { hideDOMElement } from "./hide-element";
-import { observeElement } from "./observe-element";
+import { hideDOMElement } from "../utils/hide-element";
+import { observeElement } from "../utils/observe-element";
 
 export const hidePromotedTweets = () => {
     const selector = "[data-promoted='true']"; // Promoted tweets

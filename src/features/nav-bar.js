@@ -1,5 +1,5 @@
-import { hideDOMElement } from "./hide-element";
-import { observeElement } from "./observe-element";
+import { hideDOMElement } from "../utils/hide-element";
+import { observeElement } from "../utils/observe-element";
 
 const LIKE_TAB_SELECTOR = "#__like_button_tab";
 
