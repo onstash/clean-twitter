@@ -1,16 +1,13 @@
 const noOp = () => {};
 const defaultOptions = { overrideSkip: false, disconnect: true };
 
-const checkIfDOMElementsAreValid = elements => {
-    return (
+export const observeElement = ({ selector, options = defaultOptions, callback = noOp }) => {
+    const elements = document.querySelectorAll(selector);
+    const areElementsValid = (
         elements !== null && elements !== undefined &&
         elements.length && elements.length > 0
     );
-};
-
-export const observeElement = ({ selector, options = defaultOptions, callback = noOp }) => {
-    const elements = document.querySelectorAll(selector);
-    if (checkIfDOMElementsAreValid(elements)) {
+    if (areElementsValid) {
         callback(elements, selector);
         return;
     }
