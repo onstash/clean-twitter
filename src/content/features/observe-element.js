@@ -11,6 +11,7 @@ const checkIfDOMElementsAreValid = elements => {
 export const observeElement = ({ selector, options = defaultOptions, callback = noOp }) => {
     const elements = document.querySelectorAll(selector);
     if (checkIfDOMElementsAreValid(elements)) {
+        callback(elements, selector);
         return;
     }
     const { disconnect = true, overrideSkip = false } = options;
