@@ -20,11 +20,11 @@ export const observeElement = ({ selector, options = defaultOptions, callback = 
         const matchingNodes = [];
         mutations.forEach((mutation) => {
             const nodes = Array.from(mutation.addedNodes);
-            for(const node of nodes) {
-            if(node.matches && node.matches(selector)) {
-                matchingNodes.push(node);  
+            for (const node of nodes) {
+                if (node.matches && node.matches(selector)) {
+                    matchingNodes.push(node);
+                }
             }
-            };
             if (matchingNodes.length) {
                 if (disconnect) {
                     observer.disconnect();
