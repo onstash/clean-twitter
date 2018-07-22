@@ -10,7 +10,14 @@ This extension aims to clean up Twitter's desktop web UI by removing annoying th
 * Removes "Moments" from nav-bar
 * Adds "Likes" to nav-bar
 * Removes promoted tweets
-* Loads new tweets automatically when user is at the top of the feed
+* Loads new tweets automatically when user is at the top of the feed instead of user clicking on "See <n> tweets"
+
+## Screenshots
+
+![Cluterred Twitter feed view](https://imgur.com/FggS9DM.png)
+
+![Cleaned Twitter feed view](https://imgur.com/1lyzPiA.png)
+
 
 ## How to install?
 
